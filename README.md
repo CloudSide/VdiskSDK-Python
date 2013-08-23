@@ -9,10 +9,14 @@ http://vdisk.weibo.com/developers/index.php?module=api&action=apidoc
 
 
 
-关于微盘OPENAPI、SDK使用以及技术问题请联系: [@一个开发者](http://weibo.com/smcz)
+关于微盘OPENAPI、SDK使用以及技术问题请联系: [@e乐之](http://weibo.com/cookpan001)、[@一个开发者](http://weibo.com/smcz)
 
 QQ群: 134719337、162285095
 
 邮箱: [cloudside@sina.cn](mailto:cloudside@sina.cn)
 
+[![](http://service.t.sina.com.cn/widget/qmd/1098287632/02781ba4/4.png)](http://weibo.com/cookpan001)
+
 [![](http://service.t.sina.com.cn/widget/qmd/1656360925/02781ba4/4.png)](http://weibo.com/smcz)
+
+
