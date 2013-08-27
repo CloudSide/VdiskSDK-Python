@@ -186,17 +186,21 @@ class Client(object):
         return data
 
     def delta(self,access_token,cursor = ''):
+        param = {"access_token":access_token}
+        if len(cursor) > 0:
+            param['cursor'] = cursor
         data = self.get(Client.API_URL,
                         'delta/' + self.root,
-                         {"access_token":access_token,
-                          "cursor":cursor})
+                         param)
         return data
 
     def files(self,access_token,path,rev = ''):
+        param = {"access_token":access_token}
+        if len(rev) > 0:
+            param['rev'] = rev
         data = self.get(Client.API_URL,
                         'files/' + self.root + "/" + path,
-                         {"access_token":access_token,
-                          "rev":rev})
+                         param)
         return data
 
     def revisions(self,access_token,path):
@@ -294,14 +298,17 @@ class Client(object):
         return data
 
     def fileops_copy(self,access_token,to_path,from_path = "",from_copy_ref = ""):
+        param = {"access_token":access_token,
+                 "root":self.root,
+                 "to_path":to_path
+                }
+        if len(from_path) > 0:
+            param['from_path'] = from_path
+        if len(from_copy_ref) > 0:
+            param['from_copy_ref'] = from_copy_ref
         data = self.post(Client.API_URL,
                          'fileops/copy',
-                         {"access_token":access_token,
-                          "root":self.root,
-                          "to_path":to_path,
-                          "from_path":from_path,
-                          "from_copy_ref":from_copy_ref
-                          })
+                         param)
         return data
 
     def fileops_delete(self,access_token,path):
@@ -314,13 +321,16 @@ class Client(object):
         return data
 
     def fileops_move(self,access_token,from_path = "",to_path = ""):
+        param = {"access_token":access_token,
+                 "root":self.root
+                 }
+        if len(from_path) > 0:
+            param['from_path'] = from_path
+        if len(to_path) > 0:
+            param['to_path'] = to_path
         data = self.post(Client.API_URL,
                          'fileops/move',
-                         {"access_token":access_token,
-                          "root":self.root,
-                          "to_path":to_path,
-                          "from_path":from_path
-                          })
+                         param)
         return data
 
     def fileops_create_folder(self,access_token,path):
