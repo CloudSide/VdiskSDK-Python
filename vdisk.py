@@ -165,9 +165,7 @@ class Client(object):
             else:
                 conn = httplib.HTTPConnection(host)
             conn.request(method,api,data,headers)
-            res = conn.getresponse()
-            print res,res.status,res.reason
-            return res.read()
+            return Response(conn.getresponse())
         except httplib.HTTPException,e:
             print e
             return e.read()
