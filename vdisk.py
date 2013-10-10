@@ -1,12 +1,15 @@
 #!/usr/bin/env python
 # encoding: utf-8
+# author: cookpan001
 import sys
 import logging
 import time
 import mimetypes
 import urllib
 import urllib2
-
+"""
+oauth2 client
+"""
 class OAuth2(object):
     ACCESS_TOKEN_URL = "https://auth.sina.com.cn/oauth2/access_token"
     AUTHORIZE_URL = "https://auth.sina.com.cn/oauth2/authorize"
@@ -45,7 +48,45 @@ class OAuth2(object):
             return e.read()
         except urllib2.URLError,e:
             return e.read()
-    
+"""
+All the responses will be a Response object
+"""
+class Response(object):
+    BLOCK_SIZE = 8192
+    def __init__(self,response):
+        self.response = response
+    """
+    return a HTTPMessage object
+    """
+    def headers(self):
+        if hasattr(self.resopnse,"info"):
+            return self.response.info()
+        elif hasattr(self.resopnse,"msg"):
+            return self.resopnse.msg()
+
+    """
+    Get the content of response ,optimized for big size resopnse.
+    data() return a generator. Developer can use this method like this:
+
+    for content in Response.data():
+        print content
+    """
+    def data(self):
+        while True: 
+            block = self.response.read(Response.BLOCK_SIZE) 
+            if block: 
+                yield block 
+            else: 
+                return
+
+    def read(self):
+        return self.response.read()
+
+    def __str__(self):
+        return self.response.read()
+"""
+The vdisk(weipan) client.
+"""
 class Client(object):
     log = logging.getLogger('api_client')
     API_URL = 'https://api.weipan.cn/2/'
@@ -79,7 +120,7 @@ class Client(object):
                 import socket
                 socket.setdefaulttimeout(self.timeout)
                 response = urllib2.urlopen(request)
-            return response.read()
+            return Response(response)
         except urllib2.HTTPError,e:
             return e.read()
         except urllib2.URLError,e:
@@ -104,7 +145,7 @@ class Client(object):
                 import socket
                 socket.setdefaulttimeout(self.timeout)
                 response = urllib2.urlopen(request)
-            return response.read()
+            return Response(response)
         except urllib2.HTTPError,e:
             return e.read()
         except urllib2.URLError,e:
@@ -124,8 +165,11 @@ class Client(object):
             else:
                 conn = httplib.HTTPConnection(host)
             conn.request(method,api,data,headers)
-            return conn.getresponse().read()
+            res = conn.getresponse()
+            print res,res.status,res.reason
+            return res.read()
         except httplib.HTTPException,e:
+            print e
             return e.read()
 
     def get_content_type(self, filename):
@@ -226,7 +270,9 @@ class Client(object):
                          [],
                          [("file",files["filename"],files["content"])])
         return data
-
+    """
+    content should be a file object or file raw content, such as: open("./filename","rb"), "rb" is prefered.
+    """
     def files_put(self,access_token,path,content,overwrite = "true",sha1 = "",size = "", parent_rev = ""):
         param = {
                  "access_token":access_token,
