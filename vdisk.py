@@ -59,10 +59,10 @@ class Response(object):
     return a HTTPMessage object
     """
     def headers(self):
-        if hasattr(self.resopnse,"info"):
+        if hasattr(self.response,"info"):
             return self.response.info()
-        elif hasattr(self.resopnse,"msg"):
-            return self.resopnse.msg()
+        elif hasattr(self.response,"msg"):
+            return self.response.msg()
 
     """
     Get the content of response ,optimized for big size resopnse.
